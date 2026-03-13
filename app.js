@@ -1,32 +1,62 @@
-body { font-family: 'Inter', system_ui, sans-serif; }
+let score = 0;
+let combo = 0;
+let highscore = localStorage.getItem('crit_high') || 0;
+let lastTap = Date.now();
 
-#orb {
-  transition: transform 0.1s;
-  box-shadow: 0 0 100px #22d3ee, 0 0 60px #a855f7;
+document.getElementById('highscore').textContent = highscore;
+
+const orb = document.getElementById('orb');
+
+function strike(e) {
+  e.preventDefault();
+  
+  const now = Date.now();
+  const speed = now - lastTap;
+  lastTap = now;
+
+  if (speed < 350) combo++;
+  else combo = 1;
+
+  document.getElementById('combo').textContent = combo + 'x';
+
+  let damage = Math.floor(Math.random() * 280) + 20;
+
+  const isCrit = Math.random() < 0.19;
+  if (isCrit) {
+    damage = Math.floor(damage * (Math.random() * 7 + 4));
+    orb.classList.add('crit-flash');
+    setTimeout(() => orb.classList.remove('crit-flash'), 400);
+  }
+
+  score += Math.floor(damage * (1 + combo * 0.13));
+  document.getElementById('score').textContent = score;
+
+  createFlyingNumber(damage, isCrit);
+
+  if (Math.random() < 0.05) {
+    score += Math.floor(score * 0.7);
+    createFlyingNumber("GOD ROLL", true);
+  }
+
+  if (score > highscore) {
+    highscore = score;
+    document.getElementById('highscore').textContent = highscore;
+    localStorage.setItem('crit_high', highscore);
+  }
 }
 
-.damage-number {
-  position: absolute;
-  font-size: 28px;
-  font-weight: 900;
-  pointer-events: none;
-  animation: flyUp 1.2s forwards;
-  text-shadow: 0 0 20px currentColor;
+function createFlyingNumber(value, isCrit) {
+  const num = document.createElement('div');
+  num.className = `damage-number ${isCrit ? 'text-pink-400' : 'text-cyan-400'}`;
+  num.textContent = isCrit ? `+${value}` : value;
+  num.style.left = `${Math.random() * 55 + 22}%`;
+  num.style.top = '38%';
+  document.getElementById('game-area').appendChild(num);
+  setTimeout(() => num.remove(), 1300);
 }
 
-@keyframes flyUp {
-  0% { transform: translateY(0) scale(1); opacity: 1; }
-  100% { transform: translateY(-180px) scale(0.6); opacity: 0; }
-}
+// Attach both click and touch for perfect mobile response
+orb.addEventListener('click', strike);
+orb.addEventListener('touchstart', strike);
 
-.crit-flash {
-  animation: critShake 400ms linear;
-}
-
-@keyframes critShake {
-  0%, 100% { transform: translate(0); }
-  20% { transform: translate(-8px, 4px); }
-  40% { transform: translate(8px, -4px); }
-  60% { transform: translate(-4px, 4px); }
-  80% { transform: translate(4px, -4px); }
-}
+console.log('%cCRIT v2 loaded – tap the orb like crazy 🔥', 'color:#22d3ee; font-weight:bold');
