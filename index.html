@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>CRIT • One Tap Chaos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-neutral-950 text-white min-h-screen font-sans overflow-hidden">
+
+<div class="max-w-[420px] mx-auto min-h-screen bg-neutral-950 flex flex-col shadow-2xl relative">
+
+  <!-- HEADER -->
+  <header class="bg-black px-6 py-8 text-center border-b border-cyan-500">
+    <h1 class="text-5xl font-bold tracking-tighter text-cyan-400">CRIT</h1>
+    <p class="text-xs text-neutral-400 tracking-widest">ONE TAP. PURE CHAOS.</p>
+  </header>
+
+  <!-- GAME AREA -->
+  <main class="flex-1 flex items-center justify-center relative" id="game-area">
+    <div onclick="strike()" id="orb" 
+         class="w-64 h-64 rounded-full bg-gradient-to-br from-cyan-400 to-violet-500 flex items-center justify-center cursor-pointer active:scale-95 transition-all shadow-[0_0_80px_#22d3ee] relative">
+      <div class="text-7xl font-black text-black">CRIT</div>
+    </div>
+  </main>
+
+  <!-- STATS -->
+  <div class="bg-black p-6 border-t border-cyan-500">
+    <div class="flex justify-between text-xs">
+      <div>SCORE <span id="score" class="block text-4xl font-bold text-cyan-400">0</span></div>
+      <div>COMBO <span id="combo" class="block text-4xl font-bold text-violet-400">0x</span></div>
+      <div>BEST <span id="highscore" class="block text-4xl font-bold text-amber-400">0</span></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
